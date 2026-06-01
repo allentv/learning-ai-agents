@@ -1,0 +1,50 @@
+services:
+  agent:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - MODEL_PROVIDER=${MODEL_PROVIDER:-ollama}
+      - OLLAMA_HOST=http://model:11434
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-ibm/granite4.1:3b}
+      - LLAMACPP_HOST=http://llamacpp:8080
+      - LLAMACPP_MODEL=${LLAMACPP_MODEL:-Qwen3-0.6B-Q8_0.gguf}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-sk-dummy}
+
+  model:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - model_data:/root/.ollama
+
+  llamacpp:
+    image: ghcr.io/ggml-org/llama.cpp:server
+    ports:
+      - "8081:8080"
+    volumes:
+      - llamacpp_models:/models
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        MODEL_PATH="/models/$${LLAMACPP_MODEL:-Qwen3-0.6B-Q8_0.gguf}"
+        if [ ! -f "$$MODEL_PATH" ]; then
+          echo "📥 Model $$LLAMACPP_MODEL not found. Downloading..."
+          curl -fSL -o "$$MODEL_PATH" \
+            "https://huggingface.co/$${LLAMACPP_HF_REPO:-Qwen/Qwen3-0.6B-GGUF}/resolve/main/$${LLAMACPP_HF_FILE:-Qwen3-0.6B-Q8_0.gguf}"
+          echo "✅ Download complete."
+        fi
+        exec /app/llama-server \
+          --host 0.0.0.0 --port 8080 \
+          --model "$$MODEL_PATH" \
+          --ctx-size 4096 \
+          --threads $${LLAMACPP_THREADS:-4}
+    environment:
+      - LLAMACPP_MODEL=${LLAMACPP_MODEL:-Qwen3-0.6B-Q8_0.gguf}
+      - LLAMACPP_HF_REPO=${LLAMACPP_HF_REPO:-Qwen/Qwen3-0.6B-GGUF}
+      - LLAMACPP_HF_FILE=${LLAMACPP_HF_FILE:-Qwen3-0.6B-Q8_0.gguf}
+      - LLAMACPP_THREADS=${LLAMACPP_THREADS:-4}
+
+volumes:
+  model_data:
+  llamacpp_models:
