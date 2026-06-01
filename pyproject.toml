@@ -1,0 +1,12 @@
+[project]
+name = "learning-ai-agents"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.136.3",
+    "pydantic>=2.13.4",
+    "strands-agents[ollama,openai]>=1.41.0",
+    "uvicorn[standard]>=0.48.0",
+]
