@@ -19,10 +19,7 @@ hide = false
 
 [tasks.format]
 description = "Format code with black and isort"
-run = [
-    "uv run black src/ tests/ scripts/",
-    "uv run isort src/ tests/ scripts/"
-]
+run = ["uv run black src/ tests/ scripts/", "uv run isort src/ tests/ scripts/"]
 hide = false
 
 [tasks.format-check]
@@ -61,7 +58,7 @@ run = [
     "mise run format-check",
     "mise run lint",
     "mise run type-check",
-    "mise run test"
+    "mise run test",
 ]
 hide = false
 
@@ -76,7 +73,7 @@ run = [
     "rm -rf .pytest_cache",
     "rm -rf .mypy_cache",
     "rm -rf htmlcov",
-    "rm -rf .coverage"
+    "rm -rf .coverage",
 ]
 hide = false
 
@@ -98,4 +95,14 @@ hide = false
 [tasks.help]
 description = "Show available tasks"
 run = "mise tasks"
+hide = false
+
+[tasks.up]
+description = "Start docker compose"
+run = "docker compose up"
+hide = false
+
+[tasks.down]
+description = "Stop docker compose"
+run = "docker compose down"
 hide = false

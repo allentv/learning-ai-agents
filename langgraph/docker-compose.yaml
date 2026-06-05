@@ -1,0 +1,43 @@
+services:
+  vllm:
+    image: vllm/vllm-openai:latest
+    container_name: vllm-granite
+    ports:
+      - "8000:8000"
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    environment:
+      - MODEL=ibm-granite/granite-4.1-3b
+      - VLLM_ATTENTION_BACKEND=FLASHINFER
+    command: >
+      --model ibm-granite/granite-4.1-3b
+      --host 0.0.0.0
+      --port 8000
+      --tensor-parallel-size 1
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  app:
+    build: .
+    container_name: langgraph-app
+    depends_on:
+      vllm:
+        condition: service_healthy
+    environment:
+      - MODEL_PROVIDER=vllm
+      - VLLM_URL=http://vllm:8000/v1
+      - VLLM_MODEL=ibm-granite/granite-4.1-3b
+      - LOG_LEVEL=INFO
+      - LOG_FORMAT=json
+      - APP_NAME=LangGraph Project
+      - APP_VERSION=0.1.0
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+    ports:
+      - "8080:8080"
+    command: uv run python -m langgraph_project.main

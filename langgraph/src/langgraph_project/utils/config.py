@@ -8,9 +8,16 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     """Application settings."""
 
+    # Model provider configuration
+    model_provider: str = "openai"  # "openai" or "vllm"
+    
     # OpenAI API configuration
     openai_api_key: Optional[str] = None
     openai_model: str = "gpt-4o-mini"
+    
+    # vLLM configuration
+    vllm_url: str = "http://localhost:8000/v1"
+    vllm_model: str = "ibm-granite/granite-4.1-3b"
 
     # Logging configuration
     log_level: str = "INFO"

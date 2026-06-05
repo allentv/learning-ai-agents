@@ -23,7 +23,6 @@ cd AWS-Strands
 make setup
 ```
 
-
 ### 2. LangGraph (`/langgraph/`)
 
 A Python project built with LangGraph and Pydantic AI for creating intelligent agent workflows:
@@ -41,7 +40,6 @@ A Python project built with LangGraph and Pydantic AI for creating intelligent a
 cd langgraph
 uv sync
 ```
-
 
 ## Prerequisites
 
@@ -100,15 +98,6 @@ This repository serves as a learning resource for:
 - Experimenting with various LLM integration patterns
 - Building production-ready agent services
 - Learning best practices in AI agent development
-
-## Contributing
-
-Contributions are welcome! Please ensure:
-
-- Code follows the project's formatting standards (Black, isort)
-- Type hints are used where appropriate
-- Tests are added for new functionality
-- Documentation is updated
 
 ## License
 
