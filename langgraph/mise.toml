@@ -1,0 +1,101 @@
+# Mise configuration for LangGraph project
+# https://mise.jdx.dev/
+
+[tools]
+python = "3.11"
+
+[env]
+_.python.venv = ".venv"
+
+[tasks.setup]
+description = "Set up the development environment"
+run = "uv sync --dev"
+hide = false
+
+[tasks.install]
+description = "Install dependencies"
+run = "uv sync --dev"
+hide = false
+
+[tasks.format]
+description = "Format code with black and isort"
+run = [
+    "uv run black src/ tests/ scripts/",
+    "uv run isort src/ tests/ scripts/"
+]
+hide = false
+
+[tasks.format-check]
+description = "Check code formatting"
+run = "uv run black --check src/ tests/ scripts/"
+hide = false
+
+[tasks.lint]
+description = "Lint code with ruff"
+run = "uv run ruff check src/ tests/ scripts/"
+hide = false
+
+[tasks.lint-fix]
+description = "Auto-fix linting issues"
+run = "uv run ruff check --fix src/ tests/ scripts/"
+hide = false
+
+[tasks.type-check]
+description = "Type check with mypy"
+run = "uv run mypy src/"
+hide = false
+
+[tasks.test]
+description = "Run tests"
+run = "uv run pytest"
+hide = false
+
+[tasks.test-coverage]
+description = "Run tests with coverage"
+run = "uv run pytest --cov=src/langgraph_project"
+hide = false
+
+[tasks.verify]
+description = "Run all checks (format, lint, type-check, test)"
+run = [
+    "mise run format-check",
+    "mise run lint",
+    "mise run type-check",
+    "mise run test"
+]
+hide = false
+
+[tasks.clean]
+description = "Clean up generated files"
+run = [
+    "rm -rf .venv",
+    "rm -rf __pycache__",
+    "rm -rf src/__pycache__",
+    "rm -rf tests/__pycache__",
+    "rm -rf scripts/__pycache__",
+    "rm -rf .pytest_cache",
+    "rm -rf .mypy_cache",
+    "rm -rf htmlcov",
+    "rm -rf .coverage"
+]
+hide = false
+
+[tasks.run]
+description = "Run the main application"
+run = "uv run python -m langgraph_project.main"
+hide = false
+
+[tasks.shell]
+description = "Activate the virtual environment"
+run = "source .venv/bin/activate"
+hide = false
+
+[tasks.docs]
+description = "Build documentation (placeholder)"
+run = "echo 'Documentation build not yet configured'"
+hide = false
+
+[tasks.help]
+description = "Show available tasks"
+run = "mise tasks"
+hide = false
