@@ -9,15 +9,15 @@ class Settings(BaseSettings):
     """Application settings."""
 
     # Model provider configuration
-    model_provider: str = "openai"  # "openai" or "vllm"
+    model_provider: str = "model-runner"
 
     # OpenAI API configuration
     openai_api_key: Optional[str] = None
     openai_model: str = "gpt-4o-mini"
 
-    # vLLM configuration
-    vllm_url: str = "http://localhost:8000/v1"
-    vllm_model: str = "ibm-granite/granite-4.1-3b"
+    # Model Runner configuration
+    model_runner_url: str = "http://model-runner:12434"
+    model_runner_model: str = "hf.co/unsloth/granite-4.0-h-micro-GGUF:UD-Q4_K_XL"
 
     # Logging configuration
     log_level: str = "INFO"

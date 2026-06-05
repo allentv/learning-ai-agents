@@ -47,3 +47,17 @@ class TestSimpleAgent:
         finally:
             # Restore original provider
             settings.model_provider = original_provider
+
+    def test_model_runner_mode(self):
+        """Test that model-runner mode is properly configured."""
+        # Set model provider to model-runner for this test
+        original_provider = settings.model_provider
+        settings.model_provider = "model-runner"
+
+        try:
+            agent = SimpleAgent()
+            assert agent is not None
+            assert agent.agent is not None
+        finally:
+            # Restore original provider
+            settings.model_provider = original_provider

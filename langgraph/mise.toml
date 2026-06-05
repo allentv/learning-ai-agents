@@ -106,3 +106,8 @@ hide = false
 description = "Stop docker compose"
 run = "docker compose down"
 hide = false
+
+[tasks.logs]
+description = "View docker compose logs"
+run = "docker compose logs"
+hide = false

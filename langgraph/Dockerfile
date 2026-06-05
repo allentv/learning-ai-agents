@@ -22,7 +22,7 @@ COPY src/ ./src/
 COPY tests/ ./tests/
 
 # Set environment variables
-ENV PYTHONPATH=/app
+ENV PYTHONPATH=/app/src
 ENV PYTHONUNBUFFERED=1
 
 # Run the application
