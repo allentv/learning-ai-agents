@@ -144,12 +144,21 @@ Thumbs.db
 # Specific rules for .agents folder and future projects
 # Avoid these kinds of files from git in future projects:
 
-# Agent-specific cache and temporary files
-.agents/
+# Agent-specific cache and temporary files (but not the .agents folder itself)
 *.agent_cache/
 *.agent_state/
 agent_state.json
 agent_cache.db
+
+# Cache directories that should be ignored in any project folder (including .agents)
+**/.mypy_cache/
+**/__pycache__/
+**/.pytest_cache/
+**/.ruff_cache/
+**/.cache/
+**/.venv/
+**/venv/
+**/env/
 
 # Model and training artifacts
 models/
