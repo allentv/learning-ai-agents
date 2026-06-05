@@ -140,3 +140,113 @@ Thumbs.db
 *.bak
 *.swp
 *.swo
+
+# Specific rules for .agents folder and future projects
+# Avoid these kinds of files from git in future projects:
+
+# Agent-specific cache and temporary files
+.agents/
+*.agent_cache/
+*.agent_state/
+agent_state.json
+agent_cache.db
+
+# Model and training artifacts
+models/
+*.model
+*.checkpoint
+*.weights
+*.h5
+*.pb
+*.onnx
+*.pt
+*.pth
+*.pkl
+*.joblib
+
+# Data files that should not be versioned
+data/
+*.csv
+*.jsonl
+*.parquet
+*.arrow
+*.tfrecord
+*.hdf5
+*.h5
+
+# Experiment and logging directories
+experiments/
+runs/
+logs/
+wandb/
+mlruns/
+tensorboard/
+
+# API keys and secrets (even in .agents folder)
+*.api_key
+*.secret
+*secret*
+*key*
+
+# Temporary agent working directories
+.temp/
+.tmp/
+.working/
+.workdir/
+
+# Agent configuration files that may contain sensitive data
+*.config.yaml
+*.config.yml
+config.local.yaml
+config.local.yml
+
+# Cache directories for agents
+.cache/
+*.cache/
+cache/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+
+# Large binary files that should not be versioned
+*.bin
+*.dat
+*.data
+*.bin.gz
+*.dat.gz
+
+# Model checkpoints and snapshots
+checkpoints/
+snapshots/
+*.ckpt
+*.snapshot
+
+# Training logs and metrics
+training_logs/
+metrics/
+*.log
+*.metrics.json
+
+# Temporary agent output
+output/
+*.output
+*.result
+
+# Agent state files
+state/
+*.state
+*.state.json
+
+# Virtual environment (already covered but reinforcing for .agents)
+.venv/
+venv/
+env/
+
+# Python cache (already covered but reinforcing for .agents)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
