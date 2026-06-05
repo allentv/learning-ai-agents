@@ -10,11 +10,11 @@ class Settings(BaseSettings):
 
     # Model provider configuration
     model_provider: str = "openai"  # "openai" or "vllm"
-    
+
     # OpenAI API configuration
     openai_api_key: Optional[str] = None
     openai_model: str = "gpt-4o-mini"
-    
+
     # vLLM configuration
     vllm_url: str = "http://localhost:8000/v1"
     vllm_model: str = "ibm-granite/granite-4.1-3b"

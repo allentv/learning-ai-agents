@@ -3,6 +3,7 @@
 import structlog
 from pydantic_ai import Agent
 from pydantic_ai.messages import ModelMessage
+
 from langgraph_project.utils.config import settings
 
 logger = structlog.get_logger()
@@ -14,7 +15,7 @@ class SimpleAgent:
     def __init__(self):
         """Initialize the simple agent."""
         import os
-        
+
         # Determine which model to use based on configuration
         if settings.model_provider == "vllm":
             model = f"openai:{settings.vllm_model}"
@@ -30,7 +31,7 @@ class SimpleAgent:
             if settings.openai_api_key:
                 os.environ["OPENAI_API_KEY"] = settings.openai_api_key
             logger.info(f"Using OpenAI model: {settings.openai_model}")
-        
+
         self.agent = Agent(
             model=model,
             system_prompt="You are a helpful assistant. Provide concise and accurate responses.",

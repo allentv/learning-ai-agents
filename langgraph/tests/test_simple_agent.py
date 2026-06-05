@@ -13,7 +13,7 @@ class TestSimpleAgent:
 
     @pytest.mark.skipif(
         settings.model_provider == "openai" and not os.getenv("OPENAI_API_KEY"),
-        reason="OPENAI_API_KEY environment variable not set"
+        reason="OPENAI_API_KEY environment variable not set",
     )
     def test_agent_initialization(self):
         """Test that the agent initializes correctly."""
@@ -24,7 +24,7 @@ class TestSimpleAgent:
     @pytest.mark.asyncio
     @pytest.mark.skipif(
         settings.model_provider == "openai" and not os.getenv("OPENAI_API_KEY"),
-        reason="OPENAI_API_KEY environment variable not set"
+        reason="OPENAI_API_KEY environment variable not set",
     )
     async def test_process_query(self):
         """Test processing a simple query."""
@@ -39,7 +39,7 @@ class TestSimpleAgent:
         # Set model provider to vllm for this test
         original_provider = settings.model_provider
         settings.model_provider = "vllm"
-        
+
         try:
             agent = SimpleAgent()
             assert agent is not None

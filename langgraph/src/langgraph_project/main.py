@@ -7,8 +7,8 @@ import structlog
 from langgraph.graph import END, StateGraph
 from pydantic import BaseModel
 
-from .agents.simple_agent import SimpleAgent
-from .utils.logging import setup_logging
+from langgraph_project.agents.simple_agent import SimpleAgent
+from langgraph_project.utils.logging import setup_logging
 
 # Configure structured logging
 setup_logging()
