@@ -22,6 +22,10 @@ type LlamaCppLLMWrapper struct {
 
 // NewLlamaCppLLMWrapper creates a new llama.cpp LLM wrapper
 func NewLlamaCppLLMWrapper(config Config) (*LlamaCppLLMWrapper, error) {
+	if config.Model == "" {
+		return nil, fmt.Errorf("model name is required")
+	}
+
 	baseURL := config.BaseURL
 	if baseURL == "" {
 		baseURL = "http://localhost:12434/v1"
