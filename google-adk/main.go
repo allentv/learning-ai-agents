@@ -59,22 +59,6 @@ func main() {
 		}
 		logger.Info("Using Gemini model", zap.String("model", cfg.GeminiModel))
 
-	case "openai":
-		// Create OpenAI model using the ADK
-		if cfg.OpenAIKey == "" {
-			log.Fatal("OPENAI_API_KEY environment variable is required")
-		}
-
-		// Use OpenAI model through ADK
-		agentModel, err = gemini.NewModel(ctx, cfg.OpenAIModel, &genai.ClientConfig{
-			APIKey: cfg.OpenAIKey,
-		})
-		if err != nil {
-			log.Fatalf("Failed to create OpenAI model: %v", err)
-		}
-		agentTools = []tool.Tool{}
-		logger.Info("Using OpenAI model", zap.String("model", cfg.OpenAIModel))
-
 	case "llamacpp", "llama.cpp":
 		// Create llama.cpp model using our custom implementation
 		logger.Info("Using llama.cpp model", zap.String("model", cfg.LLamacppModel), zap.String("url", cfg.LLamacppURL))
@@ -94,7 +78,7 @@ func main() {
 		agentTools = []tool.Tool{}
 
 	default:
-		log.Fatalf("Unknown model provider: %s. Supported providers: gemini, openai, llamacpp", cfg.ModelProvider)
+		log.Fatalf("Unknown model provider: %s. Supported providers: gemini, llamacpp", cfg.ModelProvider)
 	}
 
 	// Create a simple agent using the official ADK

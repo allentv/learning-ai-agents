@@ -13,8 +13,6 @@ import (
 // Config holds application configuration
 type Config struct {
 	ModelProvider string `envconfig:"MODEL_PROVIDER" default:"gemini"`
-	OpenAIKey     string `envconfig:"OPENAI_API_KEY"`
-	OpenAIModel   string `envconfig:"OPENAI_MODEL" default:"gpt-4o-mini"`
 	GeminiKey     string `envconfig:"GEMINI_API_KEY"`
 	GeminiModel   string `envconfig:"GEMINI_MODEL" default:"gemini-3.1-flash-lite"`
 	LLamacppURL   string `envconfig:"LLAMACPP_URL" default:"http://localhost:12434/v1"`
