@@ -6,10 +6,11 @@ import (
 	"iter"
 	"testing"
 
-	"github.com/learning-ai-agents/google-adk/agent"
-	localmodel "github.com/learning-ai-agents/google-adk/model"
 	adkmodel "google.golang.org/adk/model"
 	"google.golang.org/genai"
+
+	"github.com/learning-ai-agents/google-adk/agent"
+	localmodel "github.com/learning-ai-agents/google-adk/model"
 )
 
 // mockLLM is a mock implementation of the LLM interface for testing

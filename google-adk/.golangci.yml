@@ -5,6 +5,14 @@ formatters:
     - gci
     - gofmt
     - goimports
+  settings:
+    gci:
+      sections:
+        - standard
+        - default
+        - prefix(github.com/learning-ai-agents/google-adk)
+      custom-order: true
+      skip-generated: true
 
 linters:
   enable:
@@ -18,15 +26,6 @@ linters:
     rules:
     - path: "_test.go"
       text: "unused-parameter"
-
-linters-settings:
-  gci:
-    sections:
-      - standard
-      - default
-      - prefix(github.com/learning-ai-agents/google-adk)
-    custom-order: true
-    skip-generated: true
 
 issues:
   exclude-use-default: false

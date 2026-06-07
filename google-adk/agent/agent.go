@@ -5,9 +5,10 @@ import (
 	"context"
 	"fmt"
 
-	localmodel "github.com/learning-ai-agents/google-adk/model"
 	adkmodel "google.golang.org/adk/model"
 	"google.golang.org/genai"
+
+	localmodel "github.com/learning-ai-agents/google-adk/model"
 )
 
 // Config represents agent configuration

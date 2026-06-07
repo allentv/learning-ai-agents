@@ -7,9 +7,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/learning-ai-agents/google-adk/config"
-	"github.com/learning-ai-agents/google-adk/logging"
-	localmodel "github.com/learning-ai-agents/google-adk/model"
 	"go.uber.org/zap"
 	"google.golang.org/adk/agent"
 	"google.golang.org/adk/agent/llmagent"
@@ -20,6 +17,10 @@ import (
 	"google.golang.org/adk/tool"
 	"google.golang.org/adk/tool/geminitool"
 	"google.golang.org/genai"
+
+	"github.com/learning-ai-agents/google-adk/config"
+	"github.com/learning-ai-agents/google-adk/logging"
+	localmodel "github.com/learning-ai-agents/google-adk/model"
 )
 
 func main() {

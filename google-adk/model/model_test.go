@@ -7,9 +7,10 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	localmodel "github.com/learning-ai-agents/google-adk/model"
 	adkmodel "google.golang.org/adk/model"
 	"google.golang.org/genai"
+
+	localmodel "github.com/learning-ai-agents/google-adk/model"
 )
 
 func TestConfig_Struct(t *testing.T) {
