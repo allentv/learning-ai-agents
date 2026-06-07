@@ -1,0 +1,2 @@
+# Downloaded LLM models and embeddings
+llamacpp_models/*.gguf

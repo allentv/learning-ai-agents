@@ -1,0 +1,28 @@
+version: "2"
+
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - goimports
+
+linters:
+  enable:
+    - misspell
+    - revive
+    - staticcheck
+    - unused
+
+linters-settings:
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(github.com/learning-ai-agents/google-adk)
+    custom-order: true
+    skip-generated: true
+
+issues:
+  exclude-use-default: false
+  max-issues-per-linter: 0
+  max-same-issues: 0

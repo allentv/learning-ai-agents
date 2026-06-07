@@ -1,0 +1,96 @@
+# Mise configuration for Google ADK Go project
+# https://mise.jdx.dev/
+
+[tools]
+go = "1.26.0"
+golangci-lint = "latest"
+
+[tasks.setup]
+description = "Set up the development environment"
+run = "go mod tidy"
+hide = false
+
+[tasks.install]
+description = "Install dependencies"
+run = "go mod tidy"
+hide = false
+
+[tasks.format]
+description = "Format code with gofmt"
+run = "gofmt -w ."
+hide = false
+
+[tasks.format-check]
+description = "Check code formatting"
+run = "gofmt -l ."
+hide = false
+
+[tasks.lint]
+description = "Lint code with golangci-lint"
+run = "golangci-lint run"
+hide = false
+
+[tasks.lint-fix]
+description = "Auto-fix linting issues with golangci-lint"
+run = "golangci-lint run --fix"
+hide = false
+
+[tasks.test]
+description = "Run tests"
+run = "go test -v ./..."
+hide = false
+
+[tasks.test-coverage]
+description = "Run tests with coverage"
+run = "go test -coverprofile=coverage.out ./..."
+hide = false
+
+[tasks.verify]
+description = "Run all checks (format, lint, test)"
+run = ["mise run format-check", "mise run lint", "mise run test"]
+hide = false
+
+[tasks.clean]
+description = "Clean up generated files"
+run = ["rm -rf coverage.out", "rm -rf google-adk"]
+hide = false
+
+[tasks.run]
+description = "Run the main application"
+run = "go run main.go"
+hide = false
+
+[tasks.build]
+description = "Build the application"
+run = "go build -o google-adk main.go"
+hide = false
+
+[tasks.help]
+description = "Show available tasks"
+run = "mise tasks"
+hide = false
+
+[tasks.up]
+description = "Start docker compose"
+run = "docker compose up"
+hide = false
+
+[tasks.down]
+description = "Stop docker compose"
+run = "docker compose down"
+hide = false
+
+[tasks.logs]
+description = "View docker compose logs"
+run = "docker compose logs"
+hide = false
+
+[tasks.download-model]
+description = "Download GGUF model for llama.cpp"
+run = [
+    "echo '📥 Downloading GGUF model granite-4.0-h-micro-UD-Q4_K_XL.gguf...'",
+    "mkdir -p llamacpp_models",
+    "curl -fSL -o 'llamacpp_models/granite-4.0-h-micro-UD-Q4_K_XL.gguf' 'https://huggingface.co/unsloth/granite-4.0-h-micro-GGUF/resolve/main/granite-4.0-h-micro-UD-Q4_K_XL.gguf'",
+    "echo '✅ Model downloaded to llamacpp_models/granite-4.0-h-micro-UD-Q4_K_XL.gguf'",
+]
+hide = false
