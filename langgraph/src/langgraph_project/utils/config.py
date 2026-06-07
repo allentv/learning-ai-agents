@@ -19,6 +19,10 @@ class Settings(BaseSettings):
     model_runner_url: str = "http://model-runner:12434"
     model_runner_model: str = "hf.co/unsloth/granite-4.0-h-micro-GGUF:UD-Q4_K_XL"
 
+    # llama.cpp configuration
+    llamacpp_url: str = "http://llamacpp:12434/v1"
+    llamacpp_model: str = "granite-4.0-h-micro-UD-Q4_K_XL.gguf"
+
     # Logging configuration
     log_level: str = "INFO"
     log_format: str = "json"
