@@ -1,6 +1,6 @@
-# Docker Compose Setup for LangGraph with vLLM
+# Docker Compose Setup for LangGraph with llama.cpp
 
-This document describes how to run the LangGraph project with locally hosted LLMs using vLLM in Docker Compose.
+This document describes how to run the LangGraph project with locally hosted LLMs using llama.cpp in Docker Compose.
 
 ## Prerequisites
 
@@ -23,7 +23,7 @@ This document describes how to run the LangGraph project with locally hosted LLM
    cp .env.example .env
    ```
 
-   Edit `.env` to set `MODEL_PROVIDER=model-runner` (`openai` for OpenAI API).
+   Edit `.env` to set `MODEL_PROVIDER=llamacpp` (or `openai` for OpenAI API).
 
 3. **Start services**:
 
@@ -76,28 +76,26 @@ You'll also need:
 
 ## Model Configuration
 
-The default model is `hf.co/unsloth/granite-4.0-h-micro-GGUF:UD-Q4_K_XL` (model-runner) or `ibm-granite/granite-4.1-3b` (vLLM). To use a different model:
+The default model is `granite-4.0-h-micro-UD-Q4_K_XL.gguf` (llama.cpp). To use a different model:
 
-1. Update `MODEL_RUNNER_MODEL` or `VLLM_MODEL` in `.env`
-2. Update the `provider.options.model` in the `model-runner` service or the `command` in the `vllm` service in `docker-compose.yaml`
+1. Update `LLAMACPP_MODEL` in `.env`
+2. Update the `command` in the `llamacpp` service in `docker-compose.yaml`
+3. Download the new model to `llamacpp_models/` directory
 
 ## Troubleshooting
 
-### Model Runner service fails to start
+### llama.cpp service fails to start
 
-- Check that the model is available and accessible
-- Ensure you have enough disk space for the model
-- Check network connectivity to download the model if needed
-
-### vLLM service fails to start
-
-- Check GPU availability: `nvidia-smi`
-- Ensure you have enough VRAM (at least 6GB for granite-4.1-3b)
-- Try CPU-only mode by removing GPU configuration
+- Check that the model file exists in `llamacpp_models/` directory
+- Ensure you have enough disk space for the model (approximately 4GB)
+- Check the container logs: `docker-compose logs llamacpp`
+- Verify the model path in the docker-compose.yaml command
 
 ### Model download issues
 
-- The model will be downloaded automatically on first run
+- Download the model manually using: `mise run download-model`
+- Ensure you have stable internet connection for downloading large model files
+- Check disk space availability
 - Check disk space (model is ~3GB)
 - Set `HF_HUB_CACHE` volume if you want to persist models
 

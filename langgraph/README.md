@@ -70,9 +70,16 @@ langgraph/
 Create a `.env` file in the project root with the following variables:
 
 ```env
+# Model Provider Configuration
+MODEL_PROVIDER=llamacpp  # "openai", "vllm", or "llamacpp"
+
 # OpenAI API Configuration
 OPENAI_API_KEY=your-openai-api-key-here
 OPENAI_MODEL=gpt-4o-mini
+
+# llama.cpp Configuration
+LLAMACPP_URL=http://localhost:12434/v1
+LLAMACPP_MODEL=granite-4.0-h-micro-UD-Q4_K_XL.gguf
 
 # Logging Configuration
 LOG_LEVEL=INFO
@@ -85,7 +92,24 @@ APP_VERSION=0.1.0
 
 ## Usage
 
-### Running the main application
+### Running with llama.cpp (Recommended)
+
+1. **Download the model**:
+   ```bash
+   mise run download-model
+   ```
+
+2. **Start services with Docker Compose**:
+   ```bash
+   docker-compose up -d
+   ```
+
+3. **Run the application**:
+   ```bash
+   docker-compose exec app uv run python -m langgraph_project.main
+   ```
+
+### Running the main application locally
 
 ```bash
 python -m langgraph_project.main
@@ -149,9 +173,17 @@ uv run pytest tests/test_specific.py
 - **langgraph**: Framework for building stateful, multi-agent applications
 - **pydantic-ai**: Type-safe AI agent development
 - **pydantic**: Data validation and settings management
-- **openai**: OpenAI API client
+- **openai**: OpenAI API client (used with llama.cpp)
 - **python-dotenv**: Environment variable management
 - **structlog**: Structured logging
+
+### Model Providers
+
+The project supports multiple model providers:
+
+- **llamacpp**: Local llama.cpp server (recommended for local development)
+- **openai**: OpenAI API
+- **vllm**: vLLM server (for GPU-accelerated inference)
 
 ## Contributing
 
