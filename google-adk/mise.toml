@@ -37,7 +37,7 @@ hide = false
 
 [tasks.test]
 description = "Run tests"
-run = "go test -v ./..."
+run = "go test ./..."
 hide = false
 
 [tasks.test-coverage]
