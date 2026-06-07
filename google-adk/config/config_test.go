@@ -10,14 +10,14 @@ import (
 
 func TestConfig_LoadDefaults(t *testing.T) {
 	// Clear environment variables
-	os.Unsetenv("MODEL_PROVIDER")
-	os.Unsetenv("GEMINI_API_KEY")
-	os.Unsetenv("GEMINI_MODEL")
-	os.Unsetenv("LLAMACPP_URL")
-	os.Unsetenv("LLAMACPP_MODEL")
-	os.Unsetenv("LOG_LEVEL")
-	os.Unsetenv("APP_NAME")
-	os.Unsetenv("APP_VERSION")
+	_ = os.Unsetenv("MODEL_PROVIDER")
+	_ = os.Unsetenv("GEMINI_API_KEY")
+	_ = os.Unsetenv("GEMINI_MODEL")
+	_ = os.Unsetenv("LLAMACPP_URL")
+	_ = os.Unsetenv("LLAMACPP_MODEL")
+	_ = os.Unsetenv("LOG_LEVEL")
+	_ = os.Unsetenv("APP_NAME")
+	_ = os.Unsetenv("APP_VERSION")
 
 	cfg, err := config.Load()
 	if err != nil {
@@ -50,17 +50,17 @@ func TestConfig_LoadDefaults(t *testing.T) {
 
 func TestConfig_LoadFromEnvironment(t *testing.T) {
 	// Set environment variables
-	os.Setenv("MODEL_PROVIDER", "llamacpp")
-	os.Setenv("GEMINI_API_KEY", "test-key")
-	os.Setenv("GEMINI_MODEL", "test-model")
-	os.Setenv("LLAMACPP_URL", "http://test:1234/v1")
-	os.Setenv("LLAMACPP_MODEL", "test-model.gguf")
-	os.Setenv("LOG_LEVEL", "DEBUG")
-	os.Setenv("APP_NAME", "Test App")
-	os.Setenv("APP_VERSION", "1.0.0")
+	_ = os.Setenv("MODEL_PROVIDER", "llamacpp")
+	_ = os.Setenv("GEMINI_API_KEY", "test-key")
+	_ = os.Setenv("GEMINI_MODEL", "test-model")
+	_ = os.Setenv("LLAMACPP_URL", "http://test:1234/v1")
+	_ = os.Setenv("LLAMACPP_MODEL", "test-model.gguf")
+	_ = os.Setenv("LOG_LEVEL", "DEBUG")
+	_ = os.Setenv("APP_NAME", "Test App")
+	_ = os.Setenv("APP_VERSION", "1.0.0")
 
 	// Clear .env file if it exists
-	os.Remove(".env")
+	_ = os.Remove(".env")
 
 	cfg, err := config.Load()
 	if err != nil {
@@ -94,14 +94,14 @@ func TestConfig_LoadFromEnvironment(t *testing.T) {
 	}
 
 	// Clean up
-	os.Unsetenv("MODEL_PROVIDER")
-	os.Unsetenv("GEMINI_API_KEY")
-	os.Unsetenv("GEMINI_MODEL")
-	os.Unsetenv("LLAMACPP_URL")
-	os.Unsetenv("LLAMACPP_MODEL")
-	os.Unsetenv("LOG_LEVEL")
-	os.Unsetenv("APP_NAME")
-	os.Unsetenv("APP_VERSION")
+	_ = os.Unsetenv("MODEL_PROVIDER")
+	_ = os.Unsetenv("GEMINI_API_KEY")
+	_ = os.Unsetenv("GEMINI_MODEL")
+	_ = os.Unsetenv("LLAMACPP_URL")
+	_ = os.Unsetenv("LLAMACPP_MODEL")
+	_ = os.Unsetenv("LOG_LEVEL")
+	_ = os.Unsetenv("APP_NAME")
+	_ = os.Unsetenv("APP_VERSION")
 }
 
 func TestConfig_LoadFromEnvFile(t *testing.T) {
@@ -124,18 +124,24 @@ APP_VERSION=2.0.0`
 
 	// Change to temp directory
 	oldDir, _ := os.Getwd()
-	os.Chdir(tmpDir)
-	defer os.Chdir(oldDir)
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatalf("Failed to change directory: %v", err)
+	}
+	defer func() {
+		if err := os.Chdir(oldDir); err != nil {
+			t.Fatalf("Failed to restore directory: %v", err)
+		}
+	}()
 
 	// Clear environment variables
-	os.Unsetenv("MODEL_PROVIDER")
-	os.Unsetenv("GEMINI_API_KEY")
-	os.Unsetenv("GEMINI_MODEL")
-	os.Unsetenv("LLAMACPP_URL")
-	os.Unsetenv("LLAMACPP_MODEL")
-	os.Unsetenv("LOG_LEVEL")
-	os.Unsetenv("APP_NAME")
-	os.Unsetenv("APP_VERSION")
+	_ = os.Unsetenv("MODEL_PROVIDER")
+	_ = os.Unsetenv("GEMINI_API_KEY")
+	_ = os.Unsetenv("GEMINI_MODEL")
+	_ = os.Unsetenv("LLAMACPP_URL")
+	_ = os.Unsetenv("LLAMACPP_MODEL")
+	_ = os.Unsetenv("LOG_LEVEL")
+	_ = os.Unsetenv("APP_NAME")
+	_ = os.Unsetenv("APP_VERSION")
 
 	cfg, err := config.Load()
 	if err != nil {
@@ -185,14 +191,20 @@ LLAMACPP_URL='http://quoted:9999/v1'`
 
 	// Change to temp directory
 	oldDir, _ := os.Getwd()
-	os.Chdir(tmpDir)
-	defer os.Chdir(oldDir)
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatalf("Failed to change directory: %v", err)
+	}
+	defer func() {
+		if err := os.Chdir(oldDir); err != nil {
+			t.Fatalf("Failed to restore directory: %v", err)
+		}
+	}()
 
 	// Clear environment variables
-	os.Unsetenv("MODEL_PROVIDER")
-	os.Unsetenv("GEMINI_API_KEY")
-	os.Unsetenv("GEMINI_MODEL")
-	os.Unsetenv("LLAMACPP_URL")
+	_ = os.Unsetenv("MODEL_PROVIDER")
+	_ = os.Unsetenv("GEMINI_API_KEY")
+	_ = os.Unsetenv("GEMINI_MODEL")
+	_ = os.Unsetenv("LLAMACPP_URL")
 
 	cfg, err := config.Load()
 	if err != nil {
@@ -234,13 +246,19 @@ GEMINI_MODEL=test-model
 
 	// Change to temp directory
 	oldDir, _ := os.Getwd()
-	os.Chdir(tmpDir)
-	defer os.Chdir(oldDir)
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatalf("Failed to change directory: %v", err)
+	}
+	defer func() {
+		if err := os.Chdir(oldDir); err != nil {
+			t.Fatalf("Failed to restore directory: %v", err)
+		}
+	}()
 
 	// Clear environment variables
-	os.Unsetenv("MODEL_PROVIDER")
-	os.Unsetenv("GEMINI_API_KEY")
-	os.Unsetenv("GEMINI_MODEL")
+	_ = os.Unsetenv("MODEL_PROVIDER")
+	_ = os.Unsetenv("GEMINI_API_KEY")
+	_ = os.Unsetenv("GEMINI_MODEL")
 
 	cfg, err := config.Load()
 	if err != nil {
@@ -263,18 +281,24 @@ func TestConfig_LoadNonExistentEnvFile(t *testing.T) {
 	// Change to a directory without .env file
 	tmpDir := t.TempDir()
 	oldDir, _ := os.Getwd()
-	os.Chdir(tmpDir)
-	defer os.Chdir(oldDir)
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatalf("Failed to change directory: %v", err)
+	}
+	defer func() {
+		if err := os.Chdir(oldDir); err != nil {
+			t.Fatalf("Failed to restore directory: %v", err)
+		}
+	}()
 
 	// Clear environment variables
-	os.Unsetenv("MODEL_PROVIDER")
-	os.Unsetenv("GEMINI_API_KEY")
-	os.Unsetenv("GEMINI_MODEL")
-	os.Unsetenv("LLAMACPP_URL")
-	os.Unsetenv("LLAMACPP_MODEL")
-	os.Unsetenv("LOG_LEVEL")
-	os.Unsetenv("APP_NAME")
-	os.Unsetenv("APP_VERSION")
+	_ = os.Unsetenv("MODEL_PROVIDER")
+	_ = os.Unsetenv("GEMINI_API_KEY")
+	_ = os.Unsetenv("GEMINI_MODEL")
+	_ = os.Unsetenv("LLAMACPP_URL")
+	_ = os.Unsetenv("LLAMACPP_MODEL")
+	_ = os.Unsetenv("LOG_LEVEL")
+	_ = os.Unsetenv("APP_NAME")
+	_ = os.Unsetenv("APP_VERSION")
 
 	// Should not fail even if .env doesn't exist
 	cfg, err := config.Load()

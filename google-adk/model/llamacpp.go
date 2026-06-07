@@ -1,3 +1,4 @@
+// Package model provides implementations of the ADK's model.LLM interface.
 package model
 
 import (

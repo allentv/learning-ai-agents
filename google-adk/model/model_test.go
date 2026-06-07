@@ -177,7 +177,7 @@ func TestLlamaCppLLMWrapper_GenerateContent_Success(t *testing.T) {
 
 func TestLlamaCppLLMWrapper_GenerateContent_HTTPError(t *testing.T) {
 	// Create a test HTTP server that returns an error
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Internal Server Error"))
 	}))
@@ -224,7 +224,7 @@ func TestLlamaCppLLMWrapper_GenerateContent_HTTPError(t *testing.T) {
 
 func TestLlamaCppLLMWrapper_GenerateContent_EmptyResponse(t *testing.T) {
 	// Create a test HTTP server that returns empty choices
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		response := map[string]interface{}{
 			"choices": []map[string]interface{}{},
 		}
@@ -275,7 +275,7 @@ func TestLlamaCppLLMWrapper_GenerateContent_EmptyResponse(t *testing.T) {
 
 func TestLlamaCppLLMWrapper_GenerateContent_InvalidJSON(t *testing.T) {
 	// Create a test HTTP server that returns invalid JSON
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write([]byte("invalid json"))
 	}))
@@ -546,11 +546,8 @@ func TestLlamaCppLLMWrapper_GenerateContent_ContextCancellation(t *testing.T) {
 	// Create a test HTTP server with delay
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Simulate slow response
-		select {
-		case <-r.Context().Done():
-			// Context was cancelled
-			return
-		}
+		<-r.Context().Done()
+		// Context was cancelled
 	}))
 	defer server.Close()
 

@@ -12,6 +12,12 @@ linters:
     - revive
     - staticcheck
     - unused
+  disable:
+    - errcheck
+  exclusions:
+    rules:
+    - path: "_test.go"
+      text: "unused-parameter"
 
 linters-settings:
   gci:

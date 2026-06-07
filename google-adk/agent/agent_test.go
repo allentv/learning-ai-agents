@@ -23,7 +23,7 @@ func (m *mockLLM) Name() string {
 	return "mock-llm"
 }
 
-func (m *mockLLM) GenerateContent(ctx context.Context, req *adkmodel.LLMRequest, _ bool) iter.Seq2[*adkmodel.LLMResponse, error] {
+func (m *mockLLM) GenerateContent(_ context.Context, req *adkmodel.LLMRequest, _ bool) iter.Seq2[*adkmodel.LLMResponse, error] {
 	return func(yield func(*adkmodel.LLMResponse, error) bool) {
 		if m.shouldError {
 			yield(nil, fmt.Errorf("%s", m.errorMsg))
