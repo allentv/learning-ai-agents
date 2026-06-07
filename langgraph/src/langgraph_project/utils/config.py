@@ -9,15 +9,11 @@ class Settings(BaseSettings):
     """Application settings."""
 
     # Model provider configuration
-    model_provider: str = "model-runner"
+    model_provider: str = "llamacpp"
 
     # OpenAI API configuration
     openai_api_key: Optional[str] = None
     openai_model: str = "gpt-4o-mini"
-
-    # Model Runner configuration
-    model_runner_url: str = "http://model-runner:12434"
-    model_runner_model: str = "hf.co/unsloth/granite-4.0-h-micro-GGUF:UD-Q4_K_XL"
 
     # llama.cpp configuration
     llamacpp_url: str = "http://llamacpp:12434/v1"

@@ -101,7 +101,7 @@ The default model is `granite-4.0-h-micro-UD-Q4_K_XL.gguf` (llama.cpp). To use a
 
 ### Port conflicts
 
-- vLLM runs on port 8000 by default
+- llama.cpp runs on port 12434 by default
 - App runs on port 8080 by default
 - Change ports in `docker-compose.yaml` if needed
 
@@ -127,43 +127,48 @@ For local development without Docker:
    uv sync
    ```
 
-2. Run vLLM locally:
+2. Run llama.cpp locally:
 
    ```bash
-   python -m vllm.entrypoints.openai.api_server \
-     --model ibm-granite/granite-4.1-3b \
-     --host [IP_ADDRESS] \
-     --port 8000
+   # Download the model first
+   mise run download-model
+   
+   # Run llama.cpp server
+   ./llama.cpp/server \
+     --model llamacpp_models/granite-4.0-h-micro-UD-Q4_K_XL.gguf \
+     --host 0.0.0.0 \
+     --port 12434 \
+     --ctx-size 4096
    ```
 
 3. Run the application:
 
    ```bash
-   MODEL_PROVIDER=vllm \
-   VLLM_URL=http://localhost:8000/v1 \
+   MODEL_PROVIDER=llamacpp \
+   LLAMACPP_URL=http://localhost:12434/v1 \
    uv run python -m langgraph_project.main
    ```
 
 ## Performance Notes
 
 - **CPU Mode**: Expect slower inference (seconds per token)
-- **GPU Mode**: Much faster inference (milliseconds per token)
-- **Model Size**: granite-4.1-3b is ~3GB, requires ~6GB RAM/VRAM
-- **Context Length**: Default is 4096 tokens, can be increased with `--max-model-len`
+- **GPU Mode**: Much faster inference (milliseconds per token) with CUDA support
+- **Model Size**: granite-4.0-h-micro is ~4GB, requires ~4GB RAM
+- **Context Length**: Default is 4096 tokens, can be increased with `--ctx-size`
 
 ## API Endpoints
 
-- vLLM API: `http://localhost:8000/v1`
-- Health check: `http://localhost:8000/health`
-- OpenAI-compatible endpoint: `http://localhost:8000/v1/chat/completions`
+- llama.cpp API: `http://localhost:12434/v1`
+- Health check: `http://localhost:12434/`
+- OpenAI-compatible endpoint: `http://localhost:12434/v1/chat/completions`
 
 ## Environment Variables
 
 | Variable          | Description                                | Default                              |
 | ----------------- | ------------------------------------------ | ------------------------------------ |
-| `MODEL_PROVIDER`  | Model provider (`openai` or `vllm`)        | `openai`                             |
-| `VLLM_URL`        | vLLM API base URL                          | `http://localhost:8000/v1`           |
-| `VLLM_MODEL`      | vLLM model name                            | `ibm-granite/granite-4.1-3b`         |
+| `MODEL_PROVIDER`  | Model provider (`openai` or `llamacpp`)    | `llamacpp`                           |
+| `LLAMACPP_URL`    | llama.cpp API base URL                     | `http://llamacpp:12434/v1`           |
+| `LLAMACPP_MODEL`  | llama.cpp model name                       | `granite-4.0-h-micro-UD-Q4_K_XL.gguf`|
 | `OPENAI_API_KEY`  | OpenAI API key (if using OpenAI)           | -                                    |
 | `OPENAI_MODEL`    | OpenAI model name                          | `gpt-4o-mini`                        |
 

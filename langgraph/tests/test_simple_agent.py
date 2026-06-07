@@ -29,30 +29,16 @@ class TestSimpleAgent:
     async def test_process_query(self):
         """Test processing a simple query."""
         agent = SimpleAgent()
-        # Note: This test would require a valid OpenAI API key or vLLM server to run
+        # Note: This test would require a valid OpenAI API key or llama.cpp server to run
         # For now, we'll just test the structure
         assert hasattr(agent, "process")
         assert callable(agent.process)
 
-    def test_vllm_mode(self):
-        """Test that vLLM mode is properly configured."""
-        # Set model provider to vllm for this test
+    def test_llamacpp_mode(self):
+        """Test that llama.cpp mode is properly configured."""
+        # Set model provider to llamacpp for this test
         original_provider = settings.model_provider
-        settings.model_provider = "vllm"
-
-        try:
-            agent = SimpleAgent()
-            assert agent is not None
-            assert agent.agent is not None
-        finally:
-            # Restore original provider
-            settings.model_provider = original_provider
-
-    def test_model_runner_mode(self):
-        """Test that model-runner mode is properly configured."""
-        # Set model provider to model-runner for this test
-        original_provider = settings.model_provider
-        settings.model_provider = "model-runner"
+        settings.model_provider = "llamacpp"
 
         try:
             agent = SimpleAgent()

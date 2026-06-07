@@ -187,7 +187,6 @@ The project supports multiple model providers:
 
 - **llamacpp**: Local llama.cpp server (recommended for local development)
 - **openai**: OpenAI API
-- **vllm**: vLLM server (for GPU-accelerated inference)
 
 ## Contributing
 
