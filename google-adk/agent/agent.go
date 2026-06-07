@@ -36,6 +36,18 @@ func New(config Config) (*Agent, error) {
 	}, nil
 }
 
+// NewWithModel creates a new agent with a custom model (for testing)
+func NewWithModel(config Config, model adkmodel.LLM) (*Agent, error) {
+	if model == nil {
+		return nil, fmt.Errorf("model cannot be nil")
+	}
+
+	return &Agent{
+		config: config,
+		model:  model,
+	}, nil
+}
+
 // Request represents a request to the agent
 type Request struct {
 	Query string
