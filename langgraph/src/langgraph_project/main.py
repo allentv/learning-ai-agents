@@ -36,9 +36,9 @@ async def process_query(state: AgentState) -> AgentState:
     return state
 
 
-def create_workflow() -> StateGraph:
+def create_workflow() -> StateGraph[AgentState]:
     """Create the LangGraph workflow."""
-    workflow = StateGraph(AgentState)
+    workflow: StateGraph[AgentState] = StateGraph(AgentState)
 
     workflow.add_node("process_query", process_query)
     workflow.set_entry_point("process_query")
@@ -47,7 +47,7 @@ def create_workflow() -> StateGraph:
     return workflow
 
 
-async def main():
+async def main() -> None:
     """Main async function."""
     logger.info("Starting LangGraph project")
 

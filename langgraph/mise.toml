@@ -38,8 +38,18 @@ run = "uv run ruff check --fix src/ tests/ scripts/"
 hide = false
 
 [tasks.type-check]
-description = "Type check with mypy"
-run = "uv run mypy src/"
+description = "Type check with mypy (strict mode)"
+run = "uv run mypy --strict src/langgraph_project tests"
+hide = false
+
+[tasks.type-check-strict]
+description = "Type check with mypy (strict mode + detailed errors)"
+run = "uv run mypy --strict --show-error-codes --show-column-numbers src/langgraph_project tests"
+hide = false
+
+[tasks.type-check-verbose]
+description = "Type check with mypy (verbose output)"
+run = "uv run mypy --strict --show-error-codes --show-column-numbers --no-error-summary src/langgraph_project tests"
 hide = false
 
 [tasks.test]
@@ -57,7 +67,7 @@ description = "Run all checks (format, lint, type-check, test)"
 run = [
     "mise run format-check",
     "mise run lint",
-    "mise run type-check",
+    "mise run type-check-strict",
     "mise run test",
 ]
 hide = false

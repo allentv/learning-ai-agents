@@ -15,7 +15,7 @@ class TestSimpleAgent:
         settings.model_provider == "openai" and not os.getenv("OPENAI_API_KEY"),
         reason="OPENAI_API_KEY environment variable not set",
     )
-    def test_agent_initialization(self):
+    def test_agent_initialization(self) -> None:
         """Test that the agent initializes correctly."""
         agent = SimpleAgent()
         assert agent is not None
@@ -26,7 +26,7 @@ class TestSimpleAgent:
         settings.model_provider == "openai" and not os.getenv("OPENAI_API_KEY"),
         reason="OPENAI_API_KEY environment variable not set",
     )
-    async def test_process_query(self):
+    async def test_process_query(self) -> None:
         """Test processing a simple query."""
         agent = SimpleAgent()
         # Note: This test would require a valid OpenAI API key or llama.cpp server to run
@@ -34,7 +34,7 @@ class TestSimpleAgent:
         assert hasattr(agent, "process")
         assert callable(agent.process)
 
-    def test_llamacpp_mode(self):
+    def test_llamacpp_mode(self) -> None:
         """Test that llama.cpp mode is properly configured."""
         # Set model provider to llamacpp for this test
         original_provider = settings.model_provider
