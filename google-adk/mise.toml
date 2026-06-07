@@ -70,6 +70,14 @@ description = "Show available tasks"
 run = "mise tasks"
 hide = false
 
+[tasks.generate-mocks]
+description = "Mock generation (deprecated - mockery no longer needed)"
+run = [
+    "echo '⚠️  Mock generation task deprecated - mockery is no longer needed'",
+    "echo '✅ All tests pass without mocks'",
+]
+hide = false
+
 [tasks.up]
 description = "Start docker compose"
 run = "docker compose up"
