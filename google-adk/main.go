@@ -1,3 +1,4 @@
+// Package main provides the entry point for the Google ADK Go application.
 package main
 
 import (

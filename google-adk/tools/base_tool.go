@@ -1,3 +1,4 @@
+// Package tools provides tool implementations for AI agents.
 package tools
 
 import (

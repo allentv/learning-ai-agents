@@ -60,7 +60,12 @@ func (m *LlamaCppModel) Generate(ctx context.Context, prompt string) (*Result, e
 	if err != nil {
 		return nil, fmt.Errorf("failed to send request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if cerr := resp.Body.Close(); cerr != nil {
+			// Log the error but don't fail the operation
+			fmt.Printf("warning: failed to close response body: %v\n", cerr)
+		}
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)

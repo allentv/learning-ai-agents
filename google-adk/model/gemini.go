@@ -1,3 +1,4 @@
+// Package model provides model implementations for various AI providers including Gemini and llama.cpp.
 package model
 
 import (

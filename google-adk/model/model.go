@@ -32,16 +32,17 @@ func New(config Config) (Model, error) {
 	if config.APIKey != "" && config.BaseURL != "" && config.BaseURL != "http://localhost:12434/v1" {
 		// Likely OpenAI with custom base URL
 		return NewOpenAIModel(config)
-	} else if config.APIKey != "" && len(config.APIKey) > 20 && config.APIKey[:3] == "sk-" {
+	}
+	if config.APIKey != "" && len(config.APIKey) > 20 && config.APIKey[:3] == "sk-" {
 		// Likely OpenAI API key
 		return NewOpenAIModel(config)
-	} else if config.APIKey != "" && config.APIKey != "llamacpp-dummy-key" {
+	}
+	if config.APIKey != "" && config.APIKey != "llamacpp-dummy-key" {
 		// Likely Gemini API key
 		return NewGeminiModel(config)
-	} else {
-		// Use llama.cpp
-		return NewLlamaCppModel(config)
 	}
+	// Use llama.cpp
+	return NewLlamaCppModel(config)
 }
 
 // MockModel is a simple mock implementation for demonstration
@@ -50,7 +51,7 @@ type MockModel struct {
 }
 
 // Generate generates a response (mock implementation)
-func (m *MockModel) Generate(ctx context.Context, prompt string) (*Result, error) {
+func (m *MockModel) Generate(_ context.Context, prompt string) (*Result, error) {
 	// Simple mock response
 	response := fmt.Sprintf("Using model %s: I received your message and I'm processing it.", m.model)
 	return &Result{Text: response}, nil

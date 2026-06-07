@@ -40,7 +40,7 @@ func (w *LlamaCppLLMWrapper) Name() string {
 }
 
 // GenerateContent implements the model.LLM interface for llama.cpp
-func (w *LlamaCppLLMWrapper) GenerateContent(ctx context.Context, req *model.LLMRequest, stream bool) iter.Seq2[*model.LLMResponse, error] {
+func (w *LlamaCppLLMWrapper) GenerateContent(ctx context.Context, req *model.LLMRequest, _ bool) iter.Seq2[*model.LLMResponse, error] {
 	return func(yield func(*model.LLMResponse, error) bool) {
 		// Convert the request to llama.cpp format
 		messages := []map[string]interface{}{}
@@ -91,7 +91,12 @@ func (w *LlamaCppLLMWrapper) GenerateContent(ctx context.Context, req *model.LLM
 			yield(nil, fmt.Errorf("failed to send request: %w", err))
 			return
 		}
-		defer resp.Body.Close()
+		defer func() {
+			if cerr := resp.Body.Close(); cerr != nil {
+				// Log the error but don't fail the operation
+				fmt.Printf("warning: failed to close response body: %v\n", cerr)
+			}
+		}()
 
 		if resp.StatusCode != http.StatusOK {
 			body, _ := io.ReadAll(resp.Body)

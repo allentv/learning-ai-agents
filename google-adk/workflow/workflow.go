@@ -1,3 +1,4 @@
+// Package workflow provides workflow graph functionality for orchestrating AI agent tasks.
 package workflow
 
 import (

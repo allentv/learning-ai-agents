@@ -1,3 +1,4 @@
+// Package agent provides AI agent functionality for processing requests and generating responses.
 package agent
 
 import (
