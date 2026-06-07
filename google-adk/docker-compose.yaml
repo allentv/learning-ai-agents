@@ -1,12 +1,37 @@
 services:
+  llamacpp:
+    image: ghcr.io/ggml-org/llama.cpp:server
+    ports:
+      - "12434:12434"
+    volumes:
+      - ./llamacpp_models:/models
+    command: >
+      --host 0.0.0.0 --port 12434 --model /models/granite-4.0-h-micro-UD-Q4_K_XL.gguf --ctx-size 4096 --threads 4
+    environment:
+      - LLAMACPP_MODEL=granite-4.0-h-micro-UD-Q4_K_XL.gguf
+      - LLAMACPP_THREADS=4
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:12434/" ]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
   app:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: google-adk-app
+    depends_on:
+      llamacpp:
+        condition: service_healthy
     environment:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.0-flash}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - LLAMACPP_URL=http://llamacpp:12434/v1
+      - LLAMACPP_MODEL=${LLAMACPP_MODEL:-granite-4.0-h-micro-UD-Q4_K_XL.gguf}
       - MODEL_PROVIDER=${MODEL_PROVIDER:-gemini}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
       - APP_NAME=${APP_NAME:-Google ADK for Go}
@@ -16,3 +41,6 @@ services:
     volumes:
       - ./.env:/app/.env:ro
     command: ./google-adk
+
+volumes:
+  model_cache:

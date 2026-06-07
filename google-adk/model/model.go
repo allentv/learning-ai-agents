@@ -27,7 +27,7 @@ func New(config Config) (Model, error) {
 	// Determine which model to create based on the API key and base URL
 	// If API key is set and looks like an OpenAI key, use OpenAI
 	// If API key is set and looks like a Gemini key, use Gemini
-	// Otherwise, use llama.cpp (mock implementation for now)
+	// Otherwise, use llama.cpp
 
 	if config.APIKey != "" && config.BaseURL != "" && config.BaseURL != "http://localhost:12434/v1" {
 		// Likely OpenAI with custom base URL
@@ -39,8 +39,8 @@ func New(config Config) (Model, error) {
 		// Likely Gemini API key
 		return NewGeminiModel(config)
 	} else {
-		// Use llama.cpp (mock implementation for now)
-		return &MockModel{model: config.Model}, nil
+		// Use llama.cpp
+		return NewLlamaCppModel(config)
 	}
 }
 
