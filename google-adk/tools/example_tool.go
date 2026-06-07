@@ -18,7 +18,7 @@ func NewExampleTool() *ExampleTool {
 }
 
 // Execute implements the Tool interface
-func (t *ExampleTool) Execute(ctx context.Context, params map[string]interface{}) (map[string]interface{}, error) {
+func (t *ExampleTool) Execute(_ context.Context, params map[string]interface{}) (map[string]interface{}, error) {
 	message, ok := params["message"].(string)
 	if !ok {
 		return nil, &ToolExecutionError{

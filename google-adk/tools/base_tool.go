@@ -51,7 +51,7 @@ func (t *BaseTool) GetSchema() map[string]interface{} {
 }
 
 // Execute is not implemented in BaseTool - should be overridden by concrete implementations
-func (t *BaseTool) Execute(ctx context.Context, params map[string]interface{}) (map[string]interface{}, error) {
+func (t *BaseTool) Execute(_ context.Context, _ map[string]interface{}) (map[string]interface{}, error) {
 	return nil, nil
 }
 

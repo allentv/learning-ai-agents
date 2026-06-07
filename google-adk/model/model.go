@@ -51,7 +51,7 @@ type MockModel struct {
 }
 
 // Generate generates a response (mock implementation)
-func (m *MockModel) Generate(_ context.Context, prompt string) (*Result, error) {
+func (m *MockModel) Generate(_ context.Context, _ string) (*Result, error) {
 	// Simple mock response
 	response := fmt.Sprintf("Using model %s: I received your message and I'm processing it.", m.model)
 	return &Result{Text: response}, nil
