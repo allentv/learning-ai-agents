@@ -5,25 +5,27 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/learning-ai-agents/google-adk/model"
+	localmodel "github.com/learning-ai-agents/google-adk/model"
+	adkmodel "google.golang.org/adk/model"
+	"google.golang.org/genai"
 )
 
 // Config represents agent configuration
 type Config struct {
 	Name         string
-	Model        model.Config
+	ModelConfig  localmodel.Config
 	SystemPrompt string
 }
 
 // Agent represents an AI agent
 type Agent struct {
 	config Config
-	model  model.Model
+	model  adkmodel.LLM
 }
 
 // New creates a new agent
 func New(config Config) (*Agent, error) {
-	m, err := model.New(config.Model)
+	m, err := localmodel.NewLlamaCppLLMWrapper(config.ModelConfig)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create model: %w", err)
 	}
@@ -49,13 +51,37 @@ func (a *Agent) Run(ctx context.Context, req *Request) (*Response, error) {
 	// Build the prompt with system prompt
 	prompt := a.config.SystemPrompt + "\n\nUser: " + req.Query
 
+	// Create ADK LLM request
+	llmReq := &adkmodel.LLMRequest{
+		Contents: []*genai.Content{
+			{
+				Role: "user",
+				Parts: []*genai.Part{
+					{
+						Text: prompt,
+					},
+				},
+			},
+		},
+	}
+
 	// Generate response using the model
-	result, err := a.model.Generate(ctx, prompt)
-	if err != nil {
-		return nil, fmt.Errorf("failed to generate response: %w", err)
+	var result *adkmodel.LLMResponse
+
+	// Use the GenerateContent method which returns an iterator
+	for resp, genErr := range a.model.GenerateContent(ctx, llmReq, false) {
+		if genErr != nil {
+			return nil, fmt.Errorf("failed to generate response: %w", genErr)
+		}
+		result = resp
+		break // Take the first response
+	}
+
+	if result == nil || result.Content == nil || len(result.Content.Parts) == 0 {
+		return nil, fmt.Errorf("no response generated")
 	}
 
 	return &Response{
-		Text: result.Text,
+		Text: result.Content.Parts[0].Text,
 	}, nil
 }
