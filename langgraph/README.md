@@ -38,6 +38,7 @@ langgraph/
 ## Installation
 
 1. **Install UV** (if not already installed):
+
    ```bash
    curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
@@ -71,7 +72,7 @@ Create a `.env` file in the project root with the following variables:
 
 ```env
 # Model Provider Configuration
-MODEL_PROVIDER=llamacpp  # "openai", "vllm", or "llamacpp"
+MODEL_PROVIDER=llamacpp  # "openai" or "llamacpp"
 
 # OpenAI API Configuration
 OPENAI_API_KEY=your-openai-api-key-here
@@ -95,16 +96,19 @@ APP_VERSION=0.1.0
 ### Running with llama.cpp (Recommended)
 
 1. **Download the model**:
+
    ```bash
    mise run download-model
    ```
 
 2. **Start services with Docker Compose**:
+
    ```bash
    docker-compose up -d
    ```
 
 3. **Run the application**:
+
    ```bash
    docker-compose exec app uv run python -m langgraph_project.main
    ```

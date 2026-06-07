@@ -43,7 +43,7 @@ class SimpleAgent:
 
         try:
             result = await self.agent.run(query)
-            response: str = result.data
+            response: str = result.output
             return response
         except Exception as e:
             logger.error("Error processing query", error=str(e))
