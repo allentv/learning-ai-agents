@@ -25,13 +25,29 @@ The **Agent Development Kit (ADK) for Go** is an open-source, code-first Go tool
 
 ```text
 google-adk/
+├── agent/                    # AI agent implementation
+│   ├── agent.go
+│   └── agent_test.go
 ├── config/                   # Configuration management (using envconfig)
 │   └── config.go
 ├── logging/                  # Logging system (using Uber Zap)
 │   └── logging.go
+├── model/                    # Model providers (Gemini, llama.cpp)
+│   ├── llamacpp.go
+│   ├── model.go
+│   └── model_test.go
+├── tools/                    # Tool system and registry
+│   ├── base_tool.go
+│   ├── example_tool.go
+│   └── tools_test.go
+├── workflow/                 # Workflow orchestration
+│   ├── workflow.go
+│   └── workflow_test.go
 ├── main.go                   # Main application entry point
 ├── go.mod                    # Go module dependencies
 ├── go.sum                    # Dependency checksums
+├── docker-compose.yaml       # Docker orchestration
+├── Dockerfile                # Container definition
 ├── README.md                 # This file
 └── RUNBOOK.md                # Operational reference
 ```
@@ -74,11 +90,9 @@ This project uses [envconfig](https://github.com/kelseyhightower/envconfig) to l
 Available configuration options:
 
 - `MODEL_PROVIDER`: Model provider to use (default: "gemini")
-- `GEMINI_API_KEY`: Google Gemini API key (required)
+- `GEMINI_API_KEY`: Google Gemini API key (required for Gemini provider)
 - `GEMINI_MODEL`: Gemini model to use (default: "gemini-3.1-flash-lite")
-- `OPENAI_API_KEY`: OpenAI API key (optional)
-- `OPENAI_MODEL`: OpenAI model to use (default: "gpt-4o-mini")
-- `LLAMACPP_URL`: llama.cpp server URL (default: "<http://localhost:12434/v1>")
+- `LLAMACPP_URL`: llama.cpp server URL (default: "http://localhost:12434/v1")
 - `LLAMACPP_MODEL`: llama.cpp model to use (default: "granite-4.0-h-micro-UD-Q4_K_XL.gguf")
 - `LOG_LEVEL`: Logging level (default: "INFO")
 - `APP_NAME`: Application name (default: "Google ADK Go Project")
@@ -90,15 +104,11 @@ Example `.env` file:
 # Model Provider Configuration
 MODEL_PROVIDER=gemini
 
-# Gemini API Configuration (required)
+# Gemini API Configuration (required for Gemini provider)
 GEMINI_API_KEY=your-gemini-api-key-here
 GEMINI_MODEL=gemini-3.1-flash-lite
 
-# OpenAI API Configuration (optional)
-OPENAI_API_KEY=your-openai-api-key-here
-OPENAI_MODEL=gpt-4o-mini
-
-# llama.cpp Configuration (optional)
+# llama.cpp Configuration (required for llamacpp provider)
 LLAMACPP_URL=http://localhost:12434/v1
 LLAMACPP_MODEL=granite-4.0-h-micro-UD-Q4_K_XL.gguf
 
@@ -119,14 +129,6 @@ go run main.go
 ```
 
 ### Using Different Model Providers
-
-**OpenAI:**
-
-```bash
-export MODEL_PROVIDER=openai
-export OPENAI_API_KEY=your-key
-go run main.go
-```
 
 **Gemini:**
 
@@ -158,13 +160,29 @@ go test ./...
 go build -o google-adk main.go
 ```
 
+### Docker
+
+Build and run using Docker Compose:
+
+```bash
+docker-compose up --build
+```
+
+Or build and run manually:
+
+```bash
+docker build -t google-adk .
+docker run -it --rm google-adk
+```
+
 ### Code Structure
 
-- **Agent**: The `Agent` struct manages the interaction between tools and models
-- **Model**: Interface-based model providers (OpenAI, Gemini, llama.cpp)
-- **Tools**: Extensible tool system with registry management
+- **Agent**: The `Agent` struct manages the interaction between tools and models using the official Google ADK
+- **Model**: Interface-based model providers (Gemini, llama.cpp) with custom llama.cpp wrapper
+- **Tools**: Extensible tool system with registry management (includes Google Search tool for Gemini)
 - **Workflow**: State-based workflow orchestration
-- **Logging**: Structured logging with configurable levels
+- **Logging**: Structured logging with configurable levels using Uber Zap
+- **Configuration**: Environment-based configuration with envconfig
 
 ## License
 

@@ -226,7 +226,22 @@ go build -ldflags="-s -w" -o google-adk main.go
 
 ### Docker
 
-Create a `Dockerfile`:
+The project includes a `Dockerfile` and `docker-compose.yaml` for containerized deployment.
+
+**Using Docker Compose (recommended):**
+
+```bash
+docker-compose up --build
+```
+
+**Using Docker directly:**
+
+```bash
+docker build -t google-adk .
+docker run -it --rm google-adk
+```
+
+**Dockerfile:**
 
 ```dockerfile
 FROM golang:1.26-alpine AS builder
@@ -244,13 +259,6 @@ COPY --from=builder /app/.env .
 CMD ["./google-adk"]
 ```
 
-Build and run:
-
-```bash
-docker build -t google-adk .
-docker run -it --rm google-adk
-```
-
 ### Environment Variables
 
 Ensure all required environment variables are set in production:
@@ -261,3 +269,11 @@ export LLAMACPP_URL=http://llamacpp:12434/v1
 export LLAMACPP_MODEL=granite-4.0-h-micro-UD-Q4_K_XL.gguf
 export LOG_LEVEL=INFO
 ```
+
+### Production Considerations
+
+- **Model Provider**: Use `llamacpp` for local inference or `gemini` for cloud-based models
+- **llama.cpp Server**: Ensure the llama.cpp server is running and accessible at the configured URL
+- **API Keys**: Securely manage API keys using environment variables or secrets management
+- **Logging**: Set appropriate log levels for production environments
+- **Health Checks**: Monitor the application health using the health check endpoints

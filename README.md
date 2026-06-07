@@ -41,9 +41,30 @@ cd langgraph
 uv sync
 ```
 
+### 3. Google ADK (`/google-adk/`)
+
+A Go project built with the official Google ADK for Go, featuring:
+
+- **Google ADK for Go** - Official Agent Development Kit from Google
+- **Idiomatic Go** - Natural Go patterns and idioms
+- **Rich Tool Ecosystem** - Pre-built tools, custom functions, and integrations
+- **Modular Multi-Agent Systems** - Scalable applications with specialized agents
+- **Cloud-Native Deployment** - Easy containerization and deployment
+- **Configuration Management** - Environment-based configuration with envconfig
+- **Structured Logging** - Production-ready logging with Uber Zap
+
+**Quick Start:**
+
+```bash
+cd google-adk
+go mod tidy
+go run main.go
+```
+
 ## Prerequisites
 
 - Python 3.10+
+- Go 1.21+ (for Google ADK)
 - Docker and Docker Compose (for AWS-Strands)
 - UV package manager (for LangGraph)
 - Git for version control
@@ -89,6 +110,7 @@ The project uses the following development tools with consistent configurations:
 
    - Navigate to `AWS-Strands/` for FastAPI-based agent service
    - Navigate to `langgraph/` for LangGraph-based agent workflows
+   - Navigate to `google-adk/` for Google ADK Go agent project
 
 ## Project Goals
 
@@ -108,5 +130,7 @@ This project is for educational purposes. Please refer to individual sub-project
 - [LangGraph Documentation](https://langchain-ai.github.io/langgraph/)
 - [Pydantic AI Documentation](https://ai.pydantic.dev/)
 - [Strands Agents SDK](https://strandsagents.com/)
+- [Google ADK for Go](https://github.com/google/adk-go)
+- [Google ADK Documentation](https://google.github.io/adk-docs/)
 - [Ollama Documentation](https://ollama.com/)
 - [llama.cpp GitHub](https://github.com/ggerganov/llama.cpp)
