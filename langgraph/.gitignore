@@ -259,3 +259,6 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
+# Downloaded LLM models and embeddings
+llamacpp_models/*.gguf
