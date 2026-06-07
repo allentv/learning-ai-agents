@@ -17,15 +17,15 @@ class SimpleAgent:
         import os
 
         # Determine which model to use based on configuration
-        if settings.model_provider == "model-runner":
-            model = f"openai:{settings.model_runner_model}"
-            # Set the base URL for model-runner
-            os.environ["OPENAI_BASE_URL"] = f"{settings.model_runner_url}/v1"
-            # model-runner doesn't require an API key, but the OpenAI client does
+        if settings.model_provider == "llamacpp":
+            model = f"openai:{settings.llamacpp_model}"
+            # Set the base URL for llama.cpp
+            os.environ["OPENAI_BASE_URL"] = settings.llamacpp_url
+            # llama.cpp doesn't require an API key, but the OpenAI client does
             # Set a dummy key if not already set
             if not os.environ.get("OPENAI_API_KEY"):
-                os.environ["OPENAI_API_KEY"] = "model-runner-dummy-key"
-            logger.info(f"Using model-runner model: {settings.model_runner_model} at {settings.model_runner_url}")
+                os.environ["OPENAI_API_KEY"] = "llamacpp-dummy-key"
+            logger.info(f"Using llama.cpp model: {settings.llamacpp_model} at {settings.llamacpp_url}")
         else:
             model = f"openai:{settings.openai_model}"
             if settings.openai_api_key:
