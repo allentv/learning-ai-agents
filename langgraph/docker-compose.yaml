@@ -17,6 +17,21 @@ services:
       retries: 10
       start_period: 60s
 
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: langgraph-api
+    ports:
+      - "10000:10000"
+    volumes:
+      - ./api:/app/api
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:10000/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   app:
     build:
       context: .
@@ -25,10 +40,14 @@ services:
     depends_on:
       llamacpp:
         condition: service_healthy
+      api:
+        condition: service_healthy
     environment:
       - MODEL_PROVIDER=llamacpp
       - LLAMACPP_URL=http://llamacpp:12434/v1
       - OPENAI_API_KEY=llamacpp-dummy-key
+      - API_BASE_URL=http://api:10000
+      - API_TIMEOUT=30
       - LOG_LEVEL=INFO
       - LOG_FORMAT=json
       - APP_NAME=LangGraph Project
