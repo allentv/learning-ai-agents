@@ -1,0 +1,5 @@
+#!/bin/bash
+#MISE description="Auto-fix linting issues"
+set -euo pipefail
+
+uv run ruff check --fix src/ tests/ scripts/

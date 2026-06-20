@@ -1,0 +1,5 @@
+#!/bin/bash
+#MISE description="Start all services (llamacpp + API) in background"
+set -euo pipefail
+
+docker compose up -d

@@ -1,0 +1,8 @@
+#!/bin/bash
+#MISE description="Download GGUF model for llama.cpp"
+set -euo pipefail
+
+echo '📥 Downloading GGUF model granite-4.0-h-micro-UD-Q4_K_XL.gguf...'
+mkdir -p llamacpp_models
+curl -fSL -o 'llamacpp_models/granite-4.0-h-micro-UD-Q4_K_XL.gguf' 'https://huggingface.co/unsloth/granite-4.0-h-micro-GGUF/resolve/main/granite-4.0-h-micro-UD-Q4_K_XL.gguf'
+echo '✅ Model downloaded to llamacpp_models/granite-4.0-h-micro-UD-Q4_K_XL.gguf'

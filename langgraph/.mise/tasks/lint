@@ -1,0 +1,5 @@
+#!/bin/bash
+#MISE description="Lint code with ruff"
+set -euo pipefail
+
+uv run ruff check src/ tests/ scripts/

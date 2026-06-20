@@ -1,0 +1,5 @@
+#!/bin/bash
+#MISE description="View docker compose logs"
+set -euo pipefail
+
+docker compose logs

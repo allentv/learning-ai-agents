@@ -1,0 +1,5 @@
+#!/bin/bash
+#MISE description="Launch LangGraph Studio UI"
+set -euo pipefail
+
+uv run langgraph dev

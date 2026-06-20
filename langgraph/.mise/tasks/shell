@@ -1,0 +1,4 @@
+#!/bin/bash
+#MISE description="Activate the virtual environment"
+# This task is a no-op in script form; use 'eval "$(mise activate bash)"' or similar.
+echo "Use 'eval \"\$(mise activate zsh)\"' or source .venv/bin/activate directly."

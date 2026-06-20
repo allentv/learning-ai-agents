@@ -1,0 +1,13 @@
+#!/bin/bash
+#MISE description="Spin up everything and run the agent"
+set -euo pipefail
+
+echo '🚀 Starting all services...'
+docker compose down 2>/dev/null || true
+echo '🧹 Cleaning up port 10000 if in use...'
+fuser -k 10000/tcp 2>/dev/null || true
+docker compose up -d
+echo '⏳ Waiting for services to be healthy...'
+docker compose exec -T app sh -c 'until curl -sf http://api:10000/health > /dev/null 2>&1; do sleep 1; done' && echo '✅ API is ready' || echo '⚠️  API health check timed out'
+echo '🤖 Running agent...'
+docker compose exec app uv run python -m langgraph_project.main

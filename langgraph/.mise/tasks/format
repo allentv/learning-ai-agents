@@ -1,0 +1,6 @@
+#!/bin/bash
+#MISE description="Format code with black and isort"
+set -euo pipefail
+
+uv run black src/ tests/ scripts/
+uv run isort src/ tests/ scripts/

@@ -1,0 +1,6 @@
+#!/bin/bash
+#MISE description="Test the API endpoint"
+set -euo pipefail
+
+curl -sf http://localhost:10000/health || echo '❌ API not running. Run: mise run api'
+curl -sf 'http://localhost:10000/api/search?q=hello' | python -m json.tool || true

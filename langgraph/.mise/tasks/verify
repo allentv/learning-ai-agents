@@ -1,0 +1,8 @@
+#!/bin/bash
+#MISE description="Run all checks (format, lint, type-check, test)"
+set -euo pipefail
+
+mise run format-check
+mise run lint
+mise run type-check-strict
+mise run test

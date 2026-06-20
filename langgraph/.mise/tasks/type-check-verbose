@@ -1,0 +1,5 @@
+#!/bin/bash
+#MISE description="Type check with mypy (verbose output)"
+set -euo pipefail
+
+uv run mypy --strict --show-error-codes --show-column-numbers --no-error-summary src/langgraph_project tests

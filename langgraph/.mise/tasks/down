@@ -1,0 +1,5 @@
+#!/bin/bash
+#MISE description="Stop all services"
+set -euo pipefail
+
+docker compose down

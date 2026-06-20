@@ -1,0 +1,5 @@
+#!/bin/bash
+#MISE description="Type check with mypy (strict mode + detailed errors)"
+set -euo pipefail
+
+uv run mypy --strict --show-error-codes --show-column-numbers src/langgraph_project tests

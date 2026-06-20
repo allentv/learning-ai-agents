@@ -1,0 +1,5 @@
+#!/bin/bash
+#MISE description="Set up the development environment"
+set -euo pipefail
+
+uv sync --dev

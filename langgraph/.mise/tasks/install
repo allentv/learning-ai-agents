@@ -1,0 +1,5 @@
+#!/bin/bash
+#MISE description="Install dependencies"
+set -euo pipefail
+
+uv sync --dev

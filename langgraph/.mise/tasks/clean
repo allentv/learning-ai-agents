@@ -1,0 +1,13 @@
+#!/bin/bash
+#MISE description="Clean up generated files"
+set -euo pipefail
+
+rm -rf .venv
+rm -rf __pycache__
+rm -rf src/__pycache__
+rm -rf tests/__pycache__
+rm -rf scripts/__pycache__
+rm -rf .pytest_cache
+rm -rf .mypy_cache
+rm -rf htmlcov
+rm -rf .coverage
