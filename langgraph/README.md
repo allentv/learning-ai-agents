@@ -6,6 +6,8 @@ A Python project built with LangGraph and Pydantic AI for creating intelligent a
 
 - **LangGraph**: Build stateful, multi-agent applications with LangGraph
 - **Pydantic AI**: Type-safe AI agent development with Pydantic models
+- **Tool Calls**: Agent can fetch information from external APIs using registered tools
+- **API Service**: Lightweight FastAPI service providing endpoints for knowledge base search (RAG-ready)
 - **Structured Logging**: Comprehensive logging with structlog
 - **Configuration Management**: Environment-based configuration with Pydantic Settings
 - **Async Support**: Full async/await support for efficient execution
@@ -15,24 +17,33 @@ A Python project built with LangGraph and Pydantic AI for creating intelligent a
 
 ```text
 langgraph/
+├── api/                                # FastAPI API service
+│   ├── __init__.py
+│   ├── app.py                          # FastAPI application
+│   ├── routes.py                       # API endpoints (GET /api/search)
+│   └── requirements.txt                # API-specific dependencies
 ├── src/
 │   └── langgraph_project/
 │       ├── __init__.py
-│       ├── main.py                 # Main application entry point
+│       ├── main.py                     # Main application entry point
 │       ├── agents/
 │       │   ├── __init__.py
-│       │   └── simple_agent.py     # Simple agent implementation
+│       │   └── simple_agent.py         # Simple agent with tool support
 │       ├── tools/
-│       │   ├── __init__.py
-│       │   └── base_tool.py        # Base tool class
+│       │   ├── __init__.py             # Tool exports
+│       │   └── api_tools.py            # API fetch tools (pydantic-ai compatible)
 │       └── utils/
 │           ├── __init__.py
-│           ├── config.py           # Configuration settings
-│           └── logging.py          # Logging configuration
-├── tests/                          # Test files
-├── pyproject.toml                  # Poetry dependencies
-├── README.md                       # This file
-└── .env.example                    # Environment variables example
+│           ├── config.py               # Configuration settings
+│           └── logging.py              # Logging configuration
+├── tests/                              # Test files
+├── pyproject.toml                      # Project dependencies
+├── Dockerfile                          # App Dockerfile
+├── Dockerfile.api                      # API service Dockerfile
+├── docker-compose.yaml                 # Docker Compose (llamacpp + API + app)
+├── langgraph.json                      # LangGraph Studio config
+├── README.md                           # This file
+└── .env.example                        # Environment variables example
 ```
 
 ## Installation
@@ -82,6 +93,10 @@ OPENAI_MODEL=gpt-4o-mini
 LLAMACPP_URL=http://localhost:12434/v1
 LLAMACPP_MODEL=granite-4.0-h-micro-UD-Q4_K_XL.gguf
 
+# External API Configuration (used by agent tools)
+API_BASE_URL=http://api:10000
+API_TIMEOUT=30
+
 # Logging Configuration
 LOG_LEVEL=INFO
 LOG_FORMAT=json  # or "text"
@@ -93,7 +108,7 @@ APP_VERSION=0.1.0
 
 ## Usage
 
-### Running with llama.cpp (Recommended)
+### Running with Docker Compose (Recommended)
 
 1. **Download the model**:
 
@@ -101,11 +116,16 @@ APP_VERSION=0.1.0
    mise run download-model
    ```
 
-2. **Start services with Docker Compose**:
+2. **Start all services** (llamacpp + API + app):
 
    ```bash
    docker-compose up -d
    ```
+
+   This starts three services:
+   - **llamacpp**: Local LLM server on port `12434`
+   - **api**: FastAPI knowledge base API on port `10000`
+   - **app**: LangGraph agent application on port `8080`
 
 3. **Run the application**:
 
@@ -113,24 +133,124 @@ APP_VERSION=0.1.0
    docker-compose exec app uv run python -m langgraph_project.main
    ```
 
-### Running the main application locally
+### Running locally
 
 ```bash
 python -m langgraph_project.main
 ```
 
-### Using the agent directly
+### Using the agent directly with tools
 
 ```python
 import asyncio
 from langgraph_project.agents.simple_agent import SimpleAgent
+from langgraph_project.tools import search_api
 
 async def main():
-    agent = SimpleAgent()
-    response = await agent.process("Hello, how are you?")
+    # Initialize agent with tools
+    agent = SimpleAgent(tools=[search_api])
+
+    # The agent will automatically call search_api when it needs information
+    response = await agent.process("What is the latest news about AI?")
     print(response)
 
 asyncio.run(main())
+```
+
+### Running the API service locally
+
+```bash
+uvicorn api.app:app --host 0.0.0.0 --port 10000 --reload
+```
+
+Test the API:
+```bash
+curl "http://localhost:10000/api/search?q=hello"
+```
+
+## Tools
+
+The agent uses [pydantic-ai](https://ai.pydantic.dev/) for tool integration. Tools are plain async Python functions with type-annotated parameters — pydantic-ai automatically generates the JSON schema for the LLM.
+
+### Available Tools
+
+| Tool | Description | Endpoint |
+|------|-------------|----------|
+| `search_api` | Search the knowledge base via the external API | `GET /api/search?q=<query>` |
+
+### Adding a New Tool
+
+1. **Create the tool function** in `src/langgraph_project/tools/api_tools.py` (or a new file):
+
+   ```python
+   async def my_new_tool(param: str) -> dict[str, Any]:
+       """Description of what the tool does.
+
+       This docstring is used as the tool description for the LLM.
+
+       Args:
+           param: Description of the parameter.
+       """
+       # Implementation here
+       return {"result": "..."}
+   ```
+
+2. **Export it** in `src/langgraph_project/tools/__init__.py`:
+
+   ```python
+   from langgraph_project.tools.api_tools import search_api, my_new_tool
+
+   __all__ = ["search_api", "my_new_tool"]
+   ```
+
+3. **Register it** with the agent in `src/langgraph_project/main.py`:
+
+   ```python
+   from langgraph_project.tools import search_api, my_new_tool
+
+   AGENT_TOOLS = [search_api, my_new_tool]
+   ```
+
+### How Tool Calls Work
+
+1. The user sends a query to the agent
+2. The LLM decides whether to call a tool based on the tool schemas
+3. If a tool call is needed, pydantic-ai executes the tool function
+4. The tool result is fed back to the LLM
+5. The LLM may call more tools or produce a final text response
+6. This loop continues until the LLM produces a final answer
+
+This entire loop is handled automatically by pydantic-ai within the `process_query` node of the LangGraph graph.
+
+## API Service
+
+The project includes a lightweight FastAPI service designed as a placeholder for future RAG (Retrieval-Augmented Generation) functionality.
+
+### Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/search?q=<query>` | Search the knowledge base |
+| `GET` | `/health` | Health check |
+
+### Example Response
+
+```json
+{
+  "query": "hello",
+  "results": [
+    {
+      "id": 1,
+      "title": "Result for 'hello'",
+      "snippet": "This is a placeholder result...",
+      "score": 0.95
+    }
+  ],
+  "metadata": {
+    "total_results": 1,
+    "source": "mock"
+  }
+}
 ```
 
 ## Development
@@ -169,15 +289,16 @@ uv run pytest
 uv run pytest --cov=src/langgraph_project
 
 # Run specific test file
-uv run pytest tests/test_specific.py
+uv run pytest tests/test_api_tools.py
 ```
 
 ## Project Dependencies
 
 - **langgraph**: Framework for building stateful, multi-agent applications
-- **pydantic-ai**: Type-safe AI agent development
+- **pydantic-ai**: Type-safe AI agent development with native tool support
 - **pydantic**: Data validation and settings management
 - **openai**: OpenAI API client (used with llama.cpp)
+- **httpx**: Async HTTP client for API tool calls
 - **python-dotenv**: Environment variable management
 - **structlog**: Structured logging
 
@@ -204,4 +325,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - LangGraph team for the excellent framework
 - Pydantic team for the type-safe AI development tools
-- OpenAI for the API and models
