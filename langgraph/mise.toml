@@ -2,7 +2,7 @@
 # https://mise.jdx.dev/
 
 [tools]
-python = "3.11"
+python = "3.14"
 
 [env]
 _.python.venv = ".venv"
@@ -113,13 +113,41 @@ run = "mise tasks"
 hide = false
 
 [tasks.up]
-description = "Start docker compose"
-run = "docker compose up"
+description = "Start all services (llamacpp + API) in background"
+run = "docker compose up -d"
 hide = false
 
 [tasks.down]
-description = "Stop docker compose"
+description = "Stop all services"
 run = "docker compose down"
+hide = false
+
+[tasks.start]
+description = "Spin up everything and run the agent"
+run = [
+    "echo '🚀 Starting all services...'",
+    "docker compose down 2>/dev/null || true",
+    "echo '🧹 Cleaning up port 10000 if in use...'",
+    "fuser -k 10000/tcp 2>/dev/null || true",
+    "docker compose up -d",
+    "echo '⏳ Waiting for services to be healthy...'",
+    "docker compose exec -T app sh -c 'until curl -sf http://api:10000/health > /dev/null 2>&1; do sleep 1; done' && echo '✅ API is ready' || echo '⚠️  API health check timed out'",
+    "echo '🤖 Running agent...'",
+    "docker compose exec app uv run python -m langgraph_project.main",
+]
+hide = false
+
+[tasks.api]
+description = "Run the API service locally"
+run = "uvicorn api.app:app --host 0.0.0.0 --port 10000 --reload"
+hide = false
+
+[tasks.api-test]
+description = "Test the API endpoint"
+run = [
+    "curl -sf http://localhost:10000/health || echo '❌ API not running. Run: mise run api'",
+    "curl -sf 'http://localhost:10000/api/search?q=hello' | python -m json.tool || true",
+]
 hide = false
 
 [tasks.logs]
