@@ -262,3 +262,6 @@ __pycache__/
 
 # Downloaded LLM models and embeddings
 llamacpp_models/*.gguf
+
+# LangGraph API server runtime data
+.langgraph_api/

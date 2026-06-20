@@ -1,0 +1,6 @@
+{
+  "dependencies": ["."],
+  "graphs": {
+    "simple_agent": "./src/langgraph_project/main.py:graph"
+  }
+}

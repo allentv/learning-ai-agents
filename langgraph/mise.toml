@@ -92,6 +92,11 @@ description = "Run the main application"
 run = "uv run python -m langgraph_project.main"
 hide = false
 
+[tasks.ui]
+description = "Launch LangGraph Studio UI"
+run = "uv run langgraph dev"
+hide = false
+
 [tasks.shell]
 description = "Activate the virtual environment"
 run = "source .venv/bin/activate"

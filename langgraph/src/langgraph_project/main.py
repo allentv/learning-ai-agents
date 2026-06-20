@@ -47,19 +47,20 @@ def create_workflow() -> StateGraph[AgentState]:
     return workflow
 
 
+# Compile the graph at module level so LangGraph Studio / API server can discover it.
+# The langgraph.json config references this as `main.py:graph`.
+graph = create_workflow().compile()
+
+
 async def main() -> None:
     """Main async function."""
     logger.info("Starting LangGraph project")
-
-    # Create workflow
-    workflow = create_workflow()
-    app = workflow.compile()
 
     # Example query
     initial_state = AgentState(query="Hello, how are you?")
 
     # Run the workflow
-    result = await app.ainvoke(initial_state)
+    result = await graph.ainvoke(initial_state)
 
     logger.info("Workflow completed", result=result)
 
