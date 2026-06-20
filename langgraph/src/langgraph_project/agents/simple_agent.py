@@ -18,7 +18,7 @@ class SimpleAgent:
 
         # Determine which model to use based on configuration
         if settings.model_provider == "llamacpp":
-            model = f"openai:{settings.llamacpp_model}"
+            model = f"openai-chat:{settings.llamacpp_model}"
             # Set the base URL for llama.cpp
             os.environ["OPENAI_BASE_URL"] = settings.llamacpp_url
             # llama.cpp doesn't require an API key, but the OpenAI client does
@@ -27,7 +27,7 @@ class SimpleAgent:
                 os.environ["OPENAI_API_KEY"] = "llamacpp-dummy-key"
             logger.info(f"Using llama.cpp model: {settings.llamacpp_model} at {settings.llamacpp_url}")
         else:
-            model = f"openai:{settings.openai_model}"
+            model = f"openai-chat:{settings.openai_model}"
             if settings.openai_api_key:
                 os.environ["OPENAI_API_KEY"] = settings.openai_api_key
             logger.info(f"Using OpenAI model: {settings.openai_model}")

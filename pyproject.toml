@@ -62,7 +62,5 @@ test_runner = "pytest"
 package_manager = "uv"
 
 [tool.uv]
-# Enforce uv for all package installations
-package-index = "pypi"
 resolution = "highest"
 
